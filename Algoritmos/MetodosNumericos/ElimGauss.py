@@ -8,11 +8,11 @@ def Gaussian_Elimination(A, b, n):
     
     x = np.zeros[n]
     
-    for k in range (0, n-1):
+    for k in range (0, n):
         pivot = abs(A[k][k])
         index = k
         
-        for i in range(k+1, n-1):
+        for i in range(k+1, n):
             if(pivot < abs(A[k][k])):
                 pivot = abs(A[i][k])
                 index = i
@@ -23,11 +23,11 @@ def Gaussian_Elimination(A, b, n):
         if(k != index):
             A[k][i] = A[index, i]
         
-        for i in range(k+1, n-1):
+        for i in range(k+1, n):
             m = A[i][k] / A[k][k]
             A[i][k] = 0
             
-            for j in range(k+1, n-1):
+            for j in range(k+1, n):
                 A[i][j] = A[i][j] - m*A[k][j]
             
             b[i] = b[i] - m*b[k]

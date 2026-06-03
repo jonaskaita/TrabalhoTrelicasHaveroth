@@ -5,12 +5,12 @@ def LU_decomposition(A, n):
     L = np.eye(n)
     U = A
     
-    for k in range(0, n-1):
+    for k in range(0, n):
         
         pivot = abs(U[k][k])
         index = k
         
-        for i in range(k+1, n-1):
+        for i in range(k+1, n):
             if(pivot < abs(U[k][k])):
                 pivot = abs(U[i][k])
                 index = i
@@ -21,11 +21,11 @@ def LU_decomposition(A, n):
         if(k != index):
             U[k][i] = U[index][i]
         
-        for i in range(k+1, n-1):
+        for i in range(k+1, n):
             L[i][k] = U[i][k]/U[k][k]
             U[i][k] = 0
             
-            for j in range(k+1, n-1):
+            for j in range(k+1, n):
                 U[i][j] = U[i][j] - L[i][k]*U[k][j]
                 
     return(L, U)
