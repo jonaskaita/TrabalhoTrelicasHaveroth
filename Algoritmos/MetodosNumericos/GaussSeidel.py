@@ -13,11 +13,11 @@ def GaussSeidel(A, x, b, m, E):
     while(k < m):
         x_old = np.copy(x)
 
-        for i in range(0, n):
+        for i in range(n):
             sum = 0
-            for j in range(0, n):
+            for j in range(i):
                 sum +=  A[i][j] * x[j]
-            for j in range(i, n):
+            for j in range(i+1, n):
                 sum += A[i][j] * x_old[j]
 
             if(A[i][i] == 0):
