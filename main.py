@@ -3,6 +3,9 @@ import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.animation import FuncAnimation
 
+from Algoritmos.Trelica.rigidez import Rigidez
+from Algoritmos.Trelica.Ktotal import KTotal
+
 # Definições iniciais
 bars = []
 connects = []
@@ -21,8 +24,22 @@ for theta in range(180, -1, -alpha):
     connects.append((x, y))
 
 # Montar as arestas
-for connect in connects[1:]:
-    bars.append(((0, 0), connect))
+for i in range(1, len(connects)):
+    bars.append((0, i, r))
 
+dist = 2*r*math.sin(math.radians(alpha/2))
 for i in range(1, len(connects)-1):
-    bars.append((connects[i], connects[i+1]))
+    bars.append((i, i+1, dist))
+
+
+Kvector = []
+for no1, no2, h in bars:
+    x1, y1 = connects[no1]
+    x2, y2 = connects[no2]
+
+    Kvector.append(
+        Rigidez(x1, y1, x2, y2, h)
+    )
+
+
+Ktot = KTotal(Kvector, bars, connects)

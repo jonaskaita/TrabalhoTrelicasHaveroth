@@ -1,5 +1,4 @@
 import numpy as np
-from Algoritmos.Trelica.rigidez import Rigidez
 
 def KTotal(Kvector, bars, connects):
     n = len(connects)
@@ -20,8 +19,7 @@ def KTotal(Kvector, bars, connects):
         # e somar o K(e)[0][0] em Ktotal[2*no1][2*no1] e assim para cada
         # combinação de todos os indices dentro de cada K(e)
         
-        no1 = bars[b][0]
-        no2 = bars[b][1]
+        no1, no2, _ = bars[b]
         
         graus_lib = [2*no1, 2*no1 + 1, 2*no2, 2*no2 + 1]
         
@@ -29,4 +27,4 @@ def KTotal(Kvector, bars, connects):
             for j_Ke in range(len(k)):
                 Ktot[graus_lib[i_Ke]][graus_lib[j_Ke]] += k[i_Ke][j_Ke]
                 
-        return(Ktot)
+    return(Ktot)

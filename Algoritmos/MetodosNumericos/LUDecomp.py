@@ -3,7 +3,7 @@ import numpy as np
 
 def LU_decomposition(A, n):
     L = np.eye(n)
-    U = A
+    U = A.copy()
     
     for k in range(0, n):
         
@@ -11,7 +11,7 @@ def LU_decomposition(A, n):
         index = k
         
         for i in range(k+1, n):
-            if(pivot < abs(U[k][k])):
+            if(pivot < abs(U[i][k])):
                 pivot = abs(U[i][k])
                 index = i
                 
@@ -19,7 +19,7 @@ def LU_decomposition(A, n):
             raise ValueError("[LU] A é singular (pivot = 0)")
         
         if(k != index):
-            U[k][i] = U[index][i]
+            U[[k, index]] = U[[index, k]]
         
         for i in range(k+1, n):
             L[i][k] = U[i][k]/U[k][k]

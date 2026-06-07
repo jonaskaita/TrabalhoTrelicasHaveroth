@@ -6,14 +6,14 @@ from Algoritmos.MetodosNumericos.Subs import BackSubstitution
 
 def Gaussian_Elimination(A, b, n):
     
-    x = np.zeros[n]
+    x = np.zeros(n)
     
     for k in range (0, n):
         pivot = abs(A[k][k])
         index = k
         
         for i in range(k+1, n):
-            if(pivot < abs(A[k][k])):
+            if(pivot < abs(A[i][k])):
                 pivot = abs(A[i][k])
                 index = i
         
@@ -21,7 +21,8 @@ def Gaussian_Elimination(A, b, n):
             raise ValueError("[EG] A é singular (pivot = 0)")
         
         if(k != index):
-            A[k][i] = A[index, i]
+            A[[k, index]] = A[[index, k]]
+            b[[k, index]] = b[[index, k]]
         
         for i in range(k+1, n):
             m = A[i][k] / A[k][k]
@@ -33,5 +34,3 @@ def Gaussian_Elimination(A, b, n):
             b[i] = b[i] - m*b[k]
             
     return(BackSubstitution(A, b, x, n))
-            
-            
