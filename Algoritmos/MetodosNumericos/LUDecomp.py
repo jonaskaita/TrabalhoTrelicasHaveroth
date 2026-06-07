@@ -1,7 +1,8 @@
 import numpy as np
 from Algoritmos.MetodosNumericos.Subs import substituicao_direta, substituicao_retroativa
 
-def decomposicao_LU(A, n):
+def decomposicao_LU(A):
+    n = A.shape[0]
     L = np.eye(n)
     U = A.copy()
     P = np.arange(n)
@@ -37,7 +38,7 @@ def decomposicao_LU(A, n):
 def fatoracao_LU(A, b):
     n = len(A)
 
-    L, U, P = decomposicao_LU(A, n)
+    L, U, P = decomposicao_LU(A)
     b_perm = b[P]
 
     y = substituicao_direta(L, b_perm)
