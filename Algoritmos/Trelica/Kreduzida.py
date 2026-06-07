@@ -2,11 +2,11 @@ import numpy as np
 
 def KReduzida(Ktot, fixedxy=None, fixedx=None, fixedy=None):
     if fixedxy is None:
-        fixedxy = [0]
+        fixedxy = [1]
     if fixedx is None:
         fixedx = []
     if fixedy is None:
-        fixedy = [6]
+        fixedy = [7]
     #Perceba que os paâmetros com valores padrão estão condizentes com a imagem de referência
 
     fixed = []
