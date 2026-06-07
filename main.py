@@ -1,4 +1,5 @@
 import math
+import time
 import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.animation import FuncAnimation
@@ -9,7 +10,7 @@ from Algoritmos.Trelica.Ktotal import KTotal
 bars = []
 connects = []
 
-r = float(input())
+r = 2
 alpha = 30
 
 # Montar os nós
@@ -33,3 +34,7 @@ for i in range(1, len(connects)-1):
 
 # Calcular o Ktotal
 Ktot = KTotal(bars, connects)
+
+for b in range (1, 101):
+    F = 1000*b
+
