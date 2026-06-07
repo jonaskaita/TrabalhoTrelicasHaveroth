@@ -27,7 +27,7 @@ def gauss_seidel(A, x, b, m=50, E=10e-16):
     n = len(b)
     k = 0
     
-    while(k < m):
+    while k < m:
         x_old = np.copy(x)
 
         for i in range(n):
@@ -39,10 +39,10 @@ def gauss_seidel(A, x, b, m=50, E=10e-16):
 
             x[i] = (b[i] - sum)/A[i][i]
 
-        if(np.linalg.norm(x - x_old)/np.linalg.norm(x) < E):
+        if np.linalg.norm(x - x_old)/np.linalg.norm(x) < E:
             break
         
         x_old = np.copy(x)
         k += 1
 
-    return x
+    return x, k

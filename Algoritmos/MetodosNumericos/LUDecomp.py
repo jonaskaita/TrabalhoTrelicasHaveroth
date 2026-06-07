@@ -7,7 +7,7 @@ def decomposicao_LU(A):
     U = A.copy()
     P = np.arange(n)
 
-    for k in range(n):
+    for k in range(n - 1):
         pivot = abs(U[k][k])
         index = k
 
@@ -36,8 +36,6 @@ def decomposicao_LU(A):
     return L, U, P
 
 def fatoracao_LU(A, b):
-    n = len(A)
-
     L, U, P = decomposicao_LU(A)
     b_perm = b[P]
 

@@ -12,11 +12,10 @@ def jacobi(A, x, b, m=50, E=10e-16):
     if not criterio_das_linhas(A):
         print("Matriz não cumpre o critério das linhas")
 
-    stop = 0
     n = len(b)
     k = 0
 
-    while(stop == 0 and k < m):
+    while k < m:
         x_old = np.copy(x)
 
         for i in range(0, n):
@@ -32,7 +31,7 @@ def jacobi(A, x, b, m=50, E=10e-16):
 
         k += 1
 
-        if(np.linalg.norm(x - x_old)/np.linalg.norm(x) < E):
-            stop = 1
+        if np.linalg.norm(x - x_old)/np.linalg.norm(x) < E:
+            break
 
-    return x    
+    return x, k
