@@ -6,9 +6,10 @@ from matplotlib.animation import FuncAnimation
 
 from Algoritmos.Trelica.Ktotal import KTotal
 from Algoritmos.MetodosNumericos.ElimGauss import eliminacao_gaussiana
-from Algoritmos.MetodosNumericos.LUDecomp import fatoracao_LU
+from Algoritmos.MetodosNumericos.LUDecomp import fatoracao_LU, decomposicao_LU
 from Algoritmos.MetodosNumericos.Jacobi import jacobi
 from Algoritmos.MetodosNumericos.GaussSeidel import gauss_seidel
+from Algoritmos.MetodosNumericos.Subs import substituicao_retroativa, substituicao_direta
 
 # Definições iniciais
 bars = []
@@ -39,9 +40,10 @@ for i in range(1, len(connects)-1):
 # Calcular o Ktotal
 Ktot = KTotal(bars, connects)
 
-tempos = {"elim gauss": [], "fat lu": [], "jacobi": [], "gauss seidel": []}
+tempos = {"elim gauss": [], "fat lu out": [], "fat lu in": [], "jacobi": [], "gauss seidel": []}
 iteracoes = {"jacobi": [], "gauss seidel": []}
 
+L, U, P = decomposicao_LU(Ktot)
 for b in range (1, 101):
     F = 1000*b
     x_inicial = np.zeros(16)
@@ -59,13 +61,23 @@ for b in range (1, 101):
     print("resultado da elim gauss: ", r)
 
     ini = time.perf_counter()
+    
+    b_perm = vec_forcas[P]
+    y = substituicao_direta(L, b_perm)
+    x = substituicao_retroativa(U, y)
+    fim = time.perf_counter()
+    tempos["fat lu out"].append(fim - ini)
+
+    print("resultado da fat lu out: ", x)
+
+    ini = time.perf_counter()
 
     r = fatoracao_LU(Ktot, vec_forcas)
 
     fim = time.perf_counter()
-    tempos["fat lu"].append(fim - ini)
+    tempos["fat lu in"].append(fim - ini)
 
-    print("resultado da fat lu: ", r)
+    print("resultado da fat lu in: ", r)
 
     ini = time.perf_counter()
 
