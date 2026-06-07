@@ -1,28 +1,28 @@
+import math
 import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.animation import FuncAnimation
 
-print("Insira a quantidade de nós: ")
-num_nodes = int(input())
-
+# Definições iniciais
 bars = []
 connects = []
 
-for i in range(num_nodes):
-    print(f"Insira coordenada x do nó {i + 1}:")
-    x = float(input())
-    print(f"Insira coordenada y do nó {i + 1}:")
-    y = float(input())
+r = float(input())
+alpha = 30
+
+# Montar os nós
+connects.append((0,0))
+for theta in range(180, -1, -alpha):
+    
+    theta_rad = math.radians(theta)
+    x = math.cos(theta_rad)*r
+    y = math.sin(theta_rad)*r
+
     connects.append((x, y))
 
-print("Insira a quantidade de barras: ")
-num_bars = int(input())
+# Montar as arestas
+for connect in connects[1:]:
+    bars.append(((0, 0), connect))
 
-for i in range (num_bars):
-    print()
-    print(f"Barra {i + 1}")
-    print("Insira o número do nó 1 (1, 2, 3, ...): ")
-    node1 = int(input()) - 1
-    print("Insira o número do nó 2 (1, 2, 3, ...): ")
-    node2 = int(input()) - 1
-    bars.append((node1, node2))
+for i in range(1, len(connects)-1):
+    bars.append((connects[i], connects[i+1]))
