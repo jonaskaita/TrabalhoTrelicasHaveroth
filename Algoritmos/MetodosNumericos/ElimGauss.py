@@ -1,13 +1,7 @@
 import numpy as np
-from Algoritmos.MetodosNumericos.Subs import BackSubstitution
+from Algoritmos.MetodosNumericos.Subs import substituicao_retroativa
 
-# Este algoritmo de eliminação gaussiana utiliza de 
-# pivotamento para minimizar problemas de divisão por 0
-
-def Gaussian_Elimination(A, b, n):
-    
-    x = np.zeros(n)
-    
+def eliminacao_gaussiana(A, b, n):
     for k in range (0, n):
         pivot = abs(A[k][k])
         index = k
@@ -17,10 +11,10 @@ def Gaussian_Elimination(A, b, n):
                 pivot = abs(A[i][k])
                 index = i
         
-        if(pivot == 0):
-            raise ValueError("[EG] A é singular (pivot = 0)")
+        if pivot == 0:
+            raise ValueError("Matriz singular")
         
-        if(k != index):
+        if k != index:
             A[[k, index]] = A[[index, k]]
             b[[k, index]] = b[[index, k]]
         
@@ -32,5 +26,6 @@ def Gaussian_Elimination(A, b, n):
                 A[i][j] = A[i][j] - m*A[k][j]
             
             b[i] = b[i] - m*b[k]
-            
-    return(BackSubstitution(A, b, x, n))
+
+    x = substituicao_retroativa(A, b)
+    return x

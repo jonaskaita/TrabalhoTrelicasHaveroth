@@ -1,12 +1,29 @@
 import numpy as np
 
-# A - Matriz de coeficientes
-# x - Vetor de chutes iniciais
-# b - Vetor de termos constantes
-# m - Máx iter
-# E - Tolerancia
+def criterio_sassenfield(A) :
+    n = len(A)
+    beta = np.zeros(n)
 
-def GaussSeidel(A, x, b, m, E):
+    for i in range(n):
+        soma = 0.0
+
+        for j in range(i):
+            soma += abs(A[i][j]) * beta[j]
+
+        for j in range(i + 1, n):
+            soma += abs(A[i][j])
+
+        if A[i][i] == 0:
+            raise ValueError("Matriz singular")
+
+        beta[i] = soma / abs(A[i][i])
+
+    return np.max(beta) < 1
+
+def gauss_seidel(A, x, b, m=50, E=10e-16):
+    if not criterio_sassenfield(A):
+        print("Matriz não cumpre o criterio de Sassenfield")
+
     n = len(b)
     k = 0
     
@@ -20,10 +37,7 @@ def GaussSeidel(A, x, b, m, E):
             for j in range(i+1, n):
                 sum += A[i][j] * x_old[j]
 
-            if(A[i][i] == 0):
-                raise ValueError("Elemento diagonal é nulo")
-
-            x[i] = (b[i] - sum) / A[i][i]
+            x[i] = (b[i] - sum)/A[i][i]
 
         if(np.linalg.norm(x - x_old)/np.linalg.norm(x) < E):
             break

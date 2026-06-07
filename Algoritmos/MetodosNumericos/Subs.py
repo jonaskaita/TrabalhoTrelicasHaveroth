@@ -1,30 +1,28 @@
 import numpy as np
 
-def BackSubstitution(U, b, x, n):
-    
-    for i in range(n - 1 , -1, -1):
+def substituicao_retroativa(U, y):
+    n = len(y)
+    x = np.zeros(n)
+
+    for i in range(n - 1, -1, -1):
         soma = 0
         for j in range(i + 1, n):
             soma += U[i][j] * x[j]
-            
-        if(U[i][i] == 0):
-            raise ValueError("Matriz é Singular (Uii = 0 detectado)")  
-        
-        x[i] = (b[i] - soma)/U[i][i]
-        
-    return(x)
 
-def FrontSubstitution(L, y, b, n):
-    
+        x[i] = (y[i] - soma) / U[i][i]
+
+    return x
+
+def substituicao_direta(L, b):
+    n = len(b)
+    y = np.zeros(n)
+
     for i in range(n):
         soma = 0
-        for j in range(0, i):
+        for j in range(i):
             soma += L[i][j] * y[j]
-        
-        if(L[i][i] == 0):
-            raise ValueError("Matriz é Singular (Lii = 0 detectado)")
-        
-        y[i] = (b[i] - soma)/L[i][i]
-        
-    return(y)
+
+        y[i] = b[i] - soma
+
+    return y
         
