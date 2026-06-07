@@ -48,7 +48,7 @@ for b in range (1, 101):
     F = 1000*b
     x_inicial = np.zeros(16)
     vec_forcas = np.array([
-        0, 0, 0, 0, 0, 0, 0, -F, 0, 0, 0, 0, 0, 0, 0, 0
+        0, -F, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
     ], dtype=float)
 
     ini = time.perf_counter()
