@@ -1,8 +1,10 @@
 import numpy as np
 from Algoritmos.MetodosNumericos.Subs import substituicao_retroativa
 
-def eliminacao_gaussiana(A, b, n):
-    for k in range (0, n):
+def eliminacao_gaussiana(A, b):
+    n = A.shape[0]
+
+    for k in range (0, n - 1):
         pivot = abs(A[k][k])
         index = k
         
