@@ -1,9 +1,29 @@
 import numpy as np
 
-def KTotal(Kvector, bars, connects):
+def Rigidez(x1, y1, x2, y2, h, EA = 2*10**7):
+    lx = (x2 - x1)/h
+    ly = (y2 - y1)/h
+
+    K = EA/h * np.array([[lx*lx, lx*ly, -lx*lx, -lx*ly],
+                         [lx*ly, ly*ly, -lx*ly, -ly*ly],
+                         [-lx*lx, -lx*ly, lx*lx, lx*ly],
+                         [-lx*ly, -ly*ly, lx*ly, ly*ly]])
+    
+    return K
+
+def KTotal(bars, connects):
+    Kvector = []
     n = len(connects)
     Ktot = np.zeros((2*n, 2*n))
     
+    for no1, no2, h in bars:
+        x1, y1 = connects[no1]
+        x2, y2 = connects[no2]
+
+        Kvector.append(
+            Rigidez(x1, y1, x2, y2, h)
+        )
+
     for b in range(len(bars)):
         k = Kvector[b]
         # Aqui pegamos cada barra da lista de barras,
@@ -27,4 +47,4 @@ def KTotal(Kvector, bars, connects):
             for j_Ke in range(len(k)):
                 Ktot[graus_lib[i_Ke]][graus_lib[j_Ke]] += k[i_Ke][j_Ke]
                 
-    return(Ktot)
+    return Ktot

@@ -3,7 +3,6 @@ import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.animation import FuncAnimation
 
-from Algoritmos.Trelica.rigidez import Rigidez
 from Algoritmos.Trelica.Ktotal import KTotal
 
 # Definições iniciais
@@ -32,14 +31,5 @@ for i in range(1, len(connects)-1):
     bars.append((i, i+1, dist))
 
 
-Kvector = []
-for no1, no2, h in bars:
-    x1, y1 = connects[no1]
-    x2, y2 = connects[no2]
-
-    Kvector.append(
-        Rigidez(x1, y1, x2, y2, h)
-    )
-
-
-Ktot = KTotal(Kvector, bars, connects)
+# Calcular o Ktotal
+Ktot = KTotal(bars, connects)
