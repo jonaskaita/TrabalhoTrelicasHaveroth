@@ -189,14 +189,41 @@ def testar_todos():
     ##############################
 
     labels = [
+            "Elim. Gaussiana", 
+            "Fatoração LU\nfatoração\núnica", 
+            "Fatoração LU\nfatoração \npor iteração",
             "Jacobi", 
             "Gauss Seidel"
             ]
     values = [
+            12,
+            12/100,
+            12,
             sum(iteracoes["jacobi"])/100.0, 
             sum(iteracoes["gauss seidel"])/100.0
             ]
-    colors = ["orange", "purple"]
+    colors = ["red", "blue", "green", "orange", "purple"]
+
+    plt.figure(figsize=(8, 5))
+    plt.bar(labels, values, color=colors)
+
+    plt.ylabel("Média de iterações")
+
+    plt.grid(axis="y", linestyle="--", alpha=0.5)
+
+    plt.show()
+
+    labels = [
+            "Elim. Gaussiana", 
+            "Fatoração LU\nfatoração\núnica", 
+            "Fatoração LU\nfatoração \npor iteração",
+            ]
+    values = [
+            12,
+            12/100,
+            12,
+            ]
+    colors = ["red", "blue", "green"]
 
     plt.figure(figsize=(8, 5))
     plt.bar(labels, values, color=colors)
@@ -213,15 +240,21 @@ def comp_tol_influencia():
     Ktot = KTotal(bars, connects)
     Kred, free = KReduzida(Ktot)
 
-    tols = 10.0 ** (-np.arange(2, 3))
+    tols = 10.0 ** (-np.arange(2, 17))
 
     print(tols)
     tols_str = [r"$10^{-2}$", r"$10^{-3}$", r"$10^{-4}$", r"$10^{-5}$", r"$10^{-3}$", r"$10^{-7}$", r"$10^{-8}$", r"$10^{-9}$", r"$10^{-10}$", r"$10^{-11}$", r"$10^{-12}$", r"$10^{-13}$", r"$10^{-14}$", r"$10^{-15}$", r"$10^{-16}$"]
-    
-    df_it_j = pl.DataFrame(schema=[str(x) for x in tols])
-    df_temp_j = pl.DataFrame(schema=[str(x) for x in tols])
-    df_it_g = pl.DataFrame(schema=[str(x) for x in tols])
-    df_temp_g = pl.DataFrame(schema=[str(x) for x in tols])
+    schema_cols = [str(x) for x in tols]
+
+    df_it_j = pl.DataFrame(schema=schema_cols)
+    df_temp_j = pl.DataFrame(schema=schema_cols)
+    df_it_g = pl.DataFrame(schema=schema_cols)
+    df_temp_g = pl.DataFrame(schema=schema_cols)
+
+    rows_it_j = []
+    rows_temp_j = []
+    rows_it_g = []
+    rows_temp_g = []
 
     print(df_it_j)
 
@@ -264,17 +297,50 @@ def comp_tol_influencia():
             itera_g.append(k)
             temp_g.append(fim - ini)
 
-        print(itera_j)
-        
-        #df_it_j.vstack(pl.DataFrame(itera_j, schema=df_it_j))
-        #df_temp_j.vstack(pl.DataFrame(temp_j, schema=df_it_j))
-        #df_it_g.vstack(pl.DataFrame(itera_g, schema=df_it_j))
-        #df_temp_g.vstack(pl.DataFrame(temp_g, schema=df_it_j))
+        rows_it_j.append(itera_j)
+        rows_temp_j.append(temp_j)
+        rows_it_g.append(itera_g)
+        rows_temp_g.append(temp_g)
 
-    print(df_it_j)
+    df_it_j = pl.DataFrame(rows_it_j, schema=schema_cols)
+    df_temp_j = pl.DataFrame(rows_temp_j, schema=schema_cols)
+    df_it_g = pl.DataFrame(rows_it_g, schema=schema_cols)
+    df_temp_g = pl.DataFrame(rows_temp_g, schema=schema_cols)
 
-#testar_todos()
-comp_tol_influencia()
+    medians_temp_j = [x for x in  df_temp_j.select(pl.all().mean())]
+    medians_temp_g = [x for x in  df_temp_g.select(pl.all().mean())]
+
+    # Plotting
+    plt.plot(tols, medians_temp_j, marker='o', label='Jacobi', linestyle='-')
+    plt.plot(tols, medians_temp_g, marker='s', label='Gauss-Seidel', linestyle='--')
+
+    plt.xscale('log')  
+    plt.xlabel(r'Tolerancia ($E$)')
+    plt.ylabel('Tempo médio (s)')
+    plt.grid(True, which="both", ls="--")
+    plt.legend()
+    plt.tight_layout()
+
+    plt.show()
+
+    medians_it_j = [x for x in  df_it_j.select(pl.all().mean())]
+    medians_it_g = [x for x in  df_it_g.select(pl.all().mean())]
+
+    # Plotting
+    plt.plot(tols, medians_it_j, marker='o', label='Jacobi', linestyle='-')
+    plt.plot(tols, medians_it_g, marker='s', label='Gauss-Seidel', linestyle='--')
+
+    plt.xscale('log')  
+    plt.xlabel(r'Tolerancia ($E$)')
+    plt.ylabel('Iterações')
+    plt.grid(True, which="both", ls="--")
+    plt.legend()
+    plt.tight_layout()
+
+    plt.show()
+
+testar_todos()
+#comp_tol_influencia()
 
 #####################
 # PARTE DA ANIMAÇÃO #
