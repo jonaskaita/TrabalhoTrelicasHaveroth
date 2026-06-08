@@ -84,7 +84,7 @@ for b in range (1, 101):
 
     ini = time.perf_counter()
 
-    x_inicial = np.zeros(Kred.shape[0])
+    x_inicial = np.array([10.0] * Kred.shape[0])
     r, k = jacobi(Kred, x_inicial, Fred)
 
     fim = time.perf_counter()
@@ -95,7 +95,7 @@ for b in range (1, 101):
 
     ini = time.perf_counter()
 
-    x_inicial = np.zeros(Kred.shape[0])
+    x_inicial = np.array([10.0] * Kred.shape[0])
     r, k = gauss_seidel(Kred, x_inicial, Fred)
 
     fim = time.perf_counter()
@@ -106,10 +106,10 @@ for b in range (1, 101):
 
 
 for k, v in tempos.items():
-    print(f"Tempo médio no {k} é {sum(v)/1000}")
+    print(f"Tempo médio no {k} é {sum(v)/100}")
 
 print(f"Quantidade de iterações da eliminacao Gausiana: {Kred.shape[0] - 1}")
 print(f"Quantidade de iterações da fatoracao Lu: {Kred.shape[0] - 1}")
 
 for k, v in iteracoes.items():
-    print(f"Quantidade média de iterações da {k}: {sum(v)/1000:0.2f}")
+    print(f"Quantidade média de iterações da {k}: {sum(v)/100:0.2f}")
