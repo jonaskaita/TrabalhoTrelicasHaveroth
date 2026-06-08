@@ -6,6 +6,7 @@ from matplotlib.animation import FuncAnimation
 
 from Algoritmos.Trelica.Ktotal import KTotal
 from Algoritmos.Trelica.Kreduzida import KReduzida
+from Algoritmos.Trelica.Desloc import deslocamento_no
 from Algoritmos.MetodosNumericos.ElimGauss import eliminacao_gaussiana
 from Algoritmos.MetodosNumericos.LUDecomp import fatoracao_LU, decomposicao_LU
 from Algoritmos.MetodosNumericos.Jacobi import jacobi
@@ -45,6 +46,9 @@ Kred, free = KReduzida(Ktot)
 tempos = {"elim gauss": [], "fat lu out": [], "fat lu in": [], "jacobi": [], "gauss seidel": []}
 iteracoes = {"jacobi": [], "gauss seidel": []}
 
+desloc_max = []
+solucoes = []
+
 L, U, P = decomposicao_LU(Kred)
 for b in range (1, 101):
     F = 1000*b
@@ -54,6 +58,11 @@ for b in range (1, 101):
         0, -F, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
     ], dtype=float)
     Fred = vec_forcas[free]
+
+    ###############
+    # Elim. Gauss #
+    ###############
+
     ini = time.perf_counter()
 
     r = eliminacao_gaussiana(Kred, Fred)
@@ -62,6 +71,17 @@ for b in range (1, 101):
     tempos["elim gauss"].append(fim - ini)
 
     print("resultado da elim gauss: ", r)
+    
+    u_global = np.zeros(Ktot.shape[0])
+    for i, grau in enumerate(free):
+        u_global[grau] = r[i]
+    
+    solucoes.append(u_global.copy())
+    desloc_max.append(deslocamento_no(connects, u_global))
+
+    ###############
+    # Fat. LU out #
+    ###############
 
     ini = time.perf_counter()
     
@@ -72,6 +92,10 @@ for b in range (1, 101):
     tempos["fat lu out"].append(fim - ini)
 
     print("resultado da fat lu out: ", x)
+    
+    ##############
+    # Fat. LU in #
+    ##############
 
     ini = time.perf_counter()
 
@@ -81,6 +105,10 @@ for b in range (1, 101):
     tempos["fat lu in"].append(fim - ini)
 
     print("resultado da fat lu in: ", r)
+
+    ##########
+    # Jacobi #
+    ##########
 
     ini = time.perf_counter()
 
@@ -92,6 +120,10 @@ for b in range (1, 101):
     iteracoes["jacobi"].append(k)
 
     print("resultado do jacobi: ", r)
+
+    ################
+    # Gauss Seidel #
+    ################
 
     ini = time.perf_counter()
 
@@ -113,3 +145,9 @@ print(f"Quantidade de iterações da fatoracao Lu: {Kred.shape[0] - 1}")
 
 for k, v in iteracoes.items():
     print(f"Quantidade média de iterações da {k}: {sum(v)/100:0.2f}")
+
+#####################
+# PARTE DA ANIMAÇÃO #
+#####################
+# Tentei fazer no notebook mas não consegui até o momento
+# Parece que um ponto que deveria ser fixo ta se deslocando (o mais a direita)
