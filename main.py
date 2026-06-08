@@ -5,6 +5,7 @@ import matplotlib.pyplot as plt
 from matplotlib.animation import FuncAnimation
 
 from Algoritmos.Trelica.Ktotal import KTotal
+from Algoritmos.Trelica.Kreduzida import KReduzida
 from Algoritmos.MetodosNumericos.ElimGauss import eliminacao_gaussiana
 from Algoritmos.MetodosNumericos.LUDecomp import fatoracao_LU, decomposicao_LU
 from Algoritmos.MetodosNumericos.Jacobi import jacobi
@@ -39,21 +40,23 @@ for i in range(1, len(connects)-1):
 
 # Calcular o Ktotal
 Ktot = KTotal(bars, connects)
+Kred, free = KReduzida(Ktot)
 
 tempos = {"elim gauss": [], "fat lu out": [], "fat lu in": [], "jacobi": [], "gauss seidel": []}
 iteracoes = {"jacobi": [], "gauss seidel": []}
 
-L, U, P = decomposicao_LU(Ktot)
+L, U, P = decomposicao_LU(Kred)
 for b in range (1, 101):
     F = 1000*b
-    x_inicial = np.zeros(16)
+    print("==============================================================")
+    print(f"Força aplicada: {F}N")
     vec_forcas = np.array([
         0, -F, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
     ], dtype=float)
-
+    Fred = vec_forcas[free]
     ini = time.perf_counter()
 
-    r = eliminacao_gaussiana(Ktot, vec_forcas)
+    r = eliminacao_gaussiana(Kred, Fred)
 
     fim = time.perf_counter()
     tempos["elim gauss"].append(fim - ini)
@@ -62,7 +65,7 @@ for b in range (1, 101):
 
     ini = time.perf_counter()
     
-    b_perm = vec_forcas[P]
+    b_perm = Fred[P]
     y = substituicao_direta(L, b_perm)
     x = substituicao_retroativa(U, y)
     fim = time.perf_counter()
@@ -72,7 +75,7 @@ for b in range (1, 101):
 
     ini = time.perf_counter()
 
-    r = fatoracao_LU(Ktot, vec_forcas)
+    r = fatoracao_LU(Kred, Fred)
 
     fim = time.perf_counter()
     tempos["fat lu in"].append(fim - ini)
@@ -81,7 +84,8 @@ for b in range (1, 101):
 
     ini = time.perf_counter()
 
-    r, k = jacobi(Ktot, x_inicial, vec_forcas)
+    x_inicial = np.zeros(Kred.shape[0])
+    r, k = jacobi(Kred, x_inicial, Fred)
 
     fim = time.perf_counter()
     tempos["jacobi"].append(fim - ini)
@@ -91,7 +95,8 @@ for b in range (1, 101):
 
     ini = time.perf_counter()
 
-    r, k = gauss_seidel(Ktot, x_inicial, vec_forcas)
+    x_inicial = np.zeros(Kred.shape[0])
+    r, k = gauss_seidel(Kred, x_inicial, Fred)
 
     fim = time.perf_counter()
     tempos["gauss seidel"].append(fim - ini)
@@ -103,8 +108,8 @@ for b in range (1, 101):
 for k, v in tempos.items():
     print(f"Tempo médio no {k} é {sum(v)/1000}")
 
-print(f"Quantidade de iterações da eliminacao Gausiana: {Ktot.shape[0] - 1}")
-print(f"Quantidade de iterações da fatoracao Lu: {Ktot.shape[0] - 1}")
+print(f"Quantidade de iterações da eliminacao Gausiana: {Kred.shape[0] - 1}")
+print(f"Quantidade de iterações da fatoracao Lu: {Kred.shape[0] - 1}")
 
 for k, v in iteracoes.items():
     print(f"Quantidade média de iterações da {k}: {sum(v)/1000:0.2f}")

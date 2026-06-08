@@ -33,4 +33,4 @@ def KReduzida(Ktot, fixedxy=None, fixedx=None, fixedy=None):
     #Agora, mantemos apenas as linha e colunas referentes aos graus de liberdade não fixos
     Kreduzida = Ktot[np.ix_(free, free)]
 
-    return Kreduzida
+    return Kreduzida, free

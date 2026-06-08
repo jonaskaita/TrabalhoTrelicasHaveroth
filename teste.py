@@ -4,11 +4,10 @@ from matplotlib.animation import FuncAnimation
 
 from Algoritmos.Trelica.Ktotal import KTotal
 from Algoritmos.Trelica.Kreduzida import KReduzida
-from Algoritmos.MetodosNumericos.ElimGauss import Gaussian_Elimination
-from Algoritmos.MetodosNumericos.GaussSeidel import GaussSeidel
-from Algoritmos.MetodosNumericos.Jacobi import Jacobi
-from Algoritmos.MetodosNumericos.LUDecomp import LU_decomposition
-from Algoritmos.MetodosNumericos.Subs import BackSubstitution, FrontSubstitution
+from Algoritmos.MetodosNumericos.ElimGauss import eliminacao_gaussiana
+from Algoritmos.MetodosNumericos.GaussSeidel import gauss_seidel
+from Algoritmos.MetodosNumericos.Jacobi import jacobi
+from Algoritmos.MetodosNumericos.LUDecomp import fatoracao_LU
 
 
 
@@ -41,16 +40,14 @@ b = np.array([
 
 max = int(1e4)
 tol = 1e-6
-print(Gaussian_Elimination(A, b))
-print(GaussSeidel(A, b, max, tol))
-print(Jacobi(A, b, max, tol))
+print(f"Eliminação Gaussiana: \n{eliminacao_gaussiana(A, b)}")
+x0 = np.zeros(A.shape[0])
+print(f"Gauss-Seidel: \n{gauss_seidel(A, x0, b, max, tol)}")
+x0 = np.zeros(A.shape[0])
+print(f"Jacobi: {jacobi(A, x0, b, max, tol)}")
+print(f"Fatoraçõa LU: \n{fatoracao_LU(A, b)}")
 
-L, U = LU_decomposition(A)
-y = FrontSubstitution(L, b)
-x = BackSubstitution(U, y)
-print(x)
-
-print(np.linalg.solve(A, b))
+print(f"Numpy: \n{np.linalg.solve(A, b)}")
 
 print("===========================================================================")
 
@@ -92,7 +89,7 @@ print(print(np.allclose(M, M_esperada*E*A)))
 
 print("===========================================================================")
 
-Mred = KReduzida(M, [0, 2], [], [1])
+Mred, f = KReduzida(M, [0, 2], [], [1])
 
 Mred_esperada = np.array([
     [1/2, 0, 0],
