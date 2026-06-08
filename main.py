@@ -265,6 +265,7 @@ def comp_tol_influencia():
             temp_g.append(fim - ini)
 
         print(itera_j)
+        
         #df_it_j.vstack(pl.DataFrame(itera_j, schema=df_it_j))
         #df_temp_j.vstack(pl.DataFrame(temp_j, schema=df_it_j))
         #df_it_g.vstack(pl.DataFrame(itera_g, schema=df_it_j))
