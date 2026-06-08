@@ -2,6 +2,8 @@ import numpy as np
 from Algoritmos.MetodosNumericos.Subs import substituicao_retroativa
 
 def eliminacao_gaussiana(A, b):
+    A = A.copy()
+    b = b.copy()
     n = A.shape[0]
 
     for k in range (0, n - 1):
