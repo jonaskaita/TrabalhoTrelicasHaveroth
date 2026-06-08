@@ -9,7 +9,12 @@ from Algoritmos.MetodosNumericos.GaussSeidel import gauss_seidel
 from Algoritmos.MetodosNumericos.Jacobi import jacobi
 from Algoritmos.MetodosNumericos.LUDecomp import fatoracao_LU
 
-
+#=======================================================#
+#ESSE ARQUIVO FOI UTILIZADO PELO GRUPO COM O OBJETIVO
+#DE COMPARAR NOSSAS IMPLEMENTAÇÕES COM O NUMPY (E O
+#EXEMPLO DO ENUNCIADO DO PROJETO), COM O PROPÓSITO DE
+#AFERIR A CORRETUDE DOS MÉTODOS IMPLEMENTADOS
+#=======================================================#
 
 A = np.array([
     [20., -1.,  2.,  0.,  1., -2.,  0.,  0.,  1., -1.],

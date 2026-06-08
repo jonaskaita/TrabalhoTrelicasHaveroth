@@ -20,7 +20,7 @@ def criterio_sassenfield(A) :
 
     return np.max(beta) < 1
 
-def gauss_seidel(A, x, b, m=1000, E=10e-16):
+def gauss_seidel(A, x, b, m=1000, E=1e-16):
     if not criterio_sassenfield(A):
         print("Matriz não cumpre o criterio de Sassenfield")
 
@@ -41,7 +41,7 @@ def gauss_seidel(A, x, b, m=1000, E=10e-16):
 
         k += 1
 
-        if np.linalg.norm(x - x_old)/np.linalg.norm(x) < E:
+        if np.linalg.norm(x - x_old)/max(np.linalg.norm(x), 1e-15) < E:
             break
         
     return x, k

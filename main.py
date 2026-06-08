@@ -120,6 +120,7 @@ for b in range (1, 101):
     iteracoes["jacobi"].append(k)
 
     print("resultado do jacobi: ", r)
+    print("Número de iterações do jacobi: ", k)
 
     ################
     # Gauss Seidel #
@@ -135,6 +136,7 @@ for b in range (1, 101):
     iteracoes["gauss seidel"].append(k)
 
     print("resultado do gauss seidel: ", r)
+    print("Número de iterações do gauss seidel: ", k)
 
 
 for k, v in tempos.items():
